@@ -1,5 +1,7 @@
 'use client';
 import Link from "next/link";
+import styles from './navbar.module.css'
+import DarkModeToggle from "../DarkModeToggle/DarkModeToggle";
 
 const allLinks = [
     {
@@ -36,17 +38,22 @@ const allLinks = [
 
 export default function Navbar() {
     return (
-        <div>
-            <Link href='/'>Saian</Link>
-            <div>
-                {
-                    allLinks.map(({id, title, url}) => (
-                        <Link key={id} href={url}>{title}</Link>
-                    ))
-                }   
-                
+        <div className={styles.container}>
+            <Link href='/' className={styles.logo}>Saian</Link>
+            <div className={styles.links}>
+                <DarkModeToggle/>
+                {allLinks.map(({id, title, url}) => (
+                    <Link 
+                        key={id} 
+                        href={url} 
+                        className={styles.link}
+                    >{title}</Link>
+                ))}
+                <button 
+                    onClick={() => {console.log('logged out')}}
+                    className={styles.logout}
+                >Logout</button>
             </div>
-            <button onClick={() => {console.log('working')}}>Logout</button>
         </div>
     )
 }
