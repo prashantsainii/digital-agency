@@ -1,7 +1,18 @@
 'use client'
-import { signIn } from 'next-auth/react'
+import { signIn, useSession } from 'next-auth/react'
 import styles from './page.module.css'
+import { useRouter } from 'next/navigation';
 export default function Login() {
+
+    const session = useSession();
+    const router = useRouter();
+    if(session.status === 'loading') {
+        return <p>Loading...</p>
+    }
+    if(session.status === 'authenticated') {
+        router.push('/dashboard');
+    }
+
     const handleSubmit = async (e) => {
         e.preventDefault();
 
@@ -10,6 +21,7 @@ export default function Login() {
 
         signIn('credentials', { email, password });
     }
+
     return(
         <div className={styles.container}>
              <form className={styles.form} onSubmit={handleSubmit}>
@@ -17,7 +29,7 @@ export default function Login() {
                 <input type="password" placeholder='password' className={styles.input} required/>
                 <button className={styles.button}>Login</button>
             </form>
-            <button onClick={() => signIn('google')}>Login with Google</button>
+            <button className={styles.button + " " + styles.google} onClick={() => signIn('google')}>Login with Google</button>
         </div>
     )
 }
